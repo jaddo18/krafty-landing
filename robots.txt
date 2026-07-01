@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://jaddo18.github.io/krafty-landing/sitemap.xml

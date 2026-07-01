@@ -3,25 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Krafty — L'assistant intelligent des artisans</title>
-  <meta name="description" content="Krafty est un assistant intelligent pour artisans et petites entreprises de services : devis, factures, rendez-vous, relances et messagerie client, automatisés." />
-  <meta property="og:title" content="Krafty — L'assistant intelligent des artisans" />
-  <meta property="og:description" content="Devis, factures, rendez-vous et relances clients, automatisés pour les artisans." />
+  <title>Krafty — Le secrétaire WhatsApp des artisans</title>
+  <meta name="description" content="Krafty répond à vos clients sur WhatsApp, prépare vos devis et factures, cale vos rendez-vous et relance les impayés. Vous validez d'un mot, il s'occupe du reste." />
+  <link rel="canonical" href="https://jaddo18.github.io/krafty-landing/" />
+  <meta name="theme-color" content="#fcfaf4" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#1b1714" media="(prefers-color-scheme: dark)" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph / Twitter -->
+  <meta property="og:title" content="Krafty — Le secrétaire WhatsApp des artisans" />
+  <meta property="og:description" content="Vos clients écrivent sur WhatsApp, Krafty prépare devis, factures et rendez-vous. Vous validez, il envoie." />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jaddo18.github.io/krafty-landing/" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:site_name" content="Krafty" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Krafty — Le secrétaire WhatsApp des artisans" />
+  <meta name="twitter:description" content="Vos clients écrivent sur WhatsApp, Krafty prépare devis, factures et rendez-vous. Vous validez, il envoie." />
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="mask-icon" href="favicon.svg" color="#1b1714" />
+  <link rel="manifest" href="site.webmanifest" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
   <style>
     :root {
       --paper: #fcfaf4;
       --paper-2: #f3eee4;
-      --paper-3: #ece4d5;
       --ink: #1b1714;
-      --ink-2: #6e665a;
-      --ink-3: #756a5b;
+      --ink-2: #655d52;      /* darkened slightly for AA contrast on paper */
+      --ink-3: #6a5f51;
       --terracotta: #a85d2e;
       --terracotta-strong: #8a4a22;
+      --sage: #7c9b6e;
       --border: #dcd2c0;
+      --paper-on-dark: #faf6ee;
       --max: 1080px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -37,11 +56,24 @@
     a { color: var(--terracotta-strong); }
     .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
 
+    /* Accessibility */
+    a:focus-visible, .btn:focus-visible, summary:focus-visible {
+      outline: 2px solid var(--terracotta); outline-offset: 3px; border-radius: 6px;
+    }
+    #main:focus { outline: none; }
+    .skip {
+      position: absolute; left: 16px; top: -60px; z-index: 50;
+      background: var(--ink); color: var(--paper); padding: 10px 16px; border-radius: 10px;
+      text-decoration: none; font-weight: 600; font-size: 14px; transition: top .18s ease;
+    }
+    .skip:focus { top: 14px; }
+
     /* Header */
     header {
-      position: sticky; top: 0; z-index: 10;
+      position: sticky; top: 0; z-index: 20;
       background: rgba(252,250,244,.85);
       backdrop-filter: saturate(160%) blur(8px);
+      -webkit-backdrop-filter: saturate(160%) blur(8px);
       border-bottom: 1px solid var(--border);
     }
     .nav { display: flex; align-items: center; justify-content: space-between; height: 68px; }
@@ -56,28 +88,85 @@
     .nav-links a { color: var(--ink-2); text-decoration: none; font-size: 15px; font-weight: 500; }
     .nav-links a:hover { color: var(--ink); }
     .btn {
-      display: inline-block; background: var(--terracotta); color: #faf6ee;
+      display: inline-block; background: var(--terracotta); color: var(--paper-on-dark);
       padding: 11px 20px; border-radius: 10px; text-decoration: none;
-      font-weight: 600; font-size: 15px; transition: background .18s ease;
+      font-weight: 600; font-size: 15px; transition: background .18s ease; min-height: 44px; line-height: 1.4;
     }
     .btn:hover { background: var(--terracotta-strong); }
     .btn-ghost { background: transparent; color: var(--ink); border: 1px solid var(--border); }
     .btn-ghost:hover { background: var(--paper-2); }
 
+    /* Mobile disclosure nav (no JS) */
+    .mobile-nav { display: none; position: relative; }
+    .mobile-nav summary { list-style: none; cursor: pointer; width: 44px; height: 44px; border-radius: 10px; border: 1px solid var(--border); display: grid; place-items: center; background: var(--paper); }
+    .mobile-nav summary::-webkit-details-marker { display: none; }
+    .mobile-nav summary span, .mobile-nav summary span::before, .mobile-nav summary span::after {
+      content: ""; display: block; width: 18px; height: 2px; background: var(--ink); border-radius: 2px; position: relative;
+    }
+    .mobile-nav summary span::before { position: absolute; top: -6px; }
+    .mobile-nav summary span::after { position: absolute; top: 6px; }
+    .mobile-panel {
+      position: absolute; right: 0; top: 52px; width: 240px;
+      background: var(--paper); border: 1px solid var(--border); border-radius: 14px;
+      box-shadow: 0 20px 44px -24px rgba(27,23,20,.4); padding: 12px; display: flex; flex-direction: column; gap: 4px;
+    }
+    .mobile-panel a { color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 500; padding: 11px 12px; border-radius: 9px; }
+    .mobile-panel a:hover { background: var(--paper-2); }
+    .mobile-panel a.btn { color: var(--paper-on-dark); text-align: center; margin-top: 6px; }
+
     /* Hero */
-    .hero { padding: 88px 0 72px; }
+    .hero { padding: 80px 0 64px; }
+    .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 52px; align-items: center; }
     .eyebrow {
       display: inline-block; font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
       color: var(--terracotta-strong); font-weight: 600; margin-bottom: 20px;
     }
-    .hero h1 { font-size: clamp(40px, 6vw, 66px); letter-spacing: -.01em; max-width: 12ch; }
-    .hero p.lead { font-size: clamp(18px, 2.2vw, 21px); color: var(--ink-2); max-width: 56ch; margin: 26px 0 34px; }
+    .hero h1 { font-size: clamp(38px, 5.4vw, 62px); letter-spacing: -.01em; max-width: 14ch; }
+    .hero p.lead { font-size: clamp(17px, 2.1vw, 20px); color: var(--ink-2); max-width: 52ch; margin: 24px 0 32px; }
     .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; }
     .hero-note { margin-top: 20px; font-size: 14px; color: var(--ink-3); }
 
+    /* Signature mock — carnet d'atelier */
+    .mock {
+      background: var(--paper); border: 1px solid var(--border); border-radius: 22px;
+      box-shadow: 0 30px 60px -30px rgba(27,23,20,.4);
+      overflow: hidden; max-width: 420px; margin-left: auto; width: 100%;
+    }
+    .mock-head { display: flex; align-items: center; gap: 12px; padding: 15px 18px; border-bottom: 1px solid var(--border); background: var(--paper-2); }
+    .mock-avatar { width: 40px; height: 40px; border-radius: 11px; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-family: 'Fraunces', serif; font-weight: 600; font-size: 19px; }
+    .mock-name { font-weight: 600; font-size: 15px; display: block; color: var(--ink); }
+    .mock-status { font-size: 12.5px; color: var(--ink-2); display: flex; align-items: center; gap: 6px; }
+    .mock-status .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--sage); display: inline-block; }
+    .mock-thread { display: flex; flex-direction: column; gap: 8px; padding: 18px; }
+    .bubble { max-width: 82%; padding: 10px 14px; border-radius: 15px; font-size: 14.5px; line-height: 1.5; }
+    .bubble.in { align-self: flex-start; background: var(--paper-2); color: var(--ink); border-bottom-left-radius: 5px; }
+    .bubble.out { align-self: flex-end; background: var(--terracotta); color: var(--paper-on-dark); border-bottom-right-radius: 5px; }
+    .typing { align-self: flex-end; display: inline-flex; gap: 5px; background: var(--paper-2); border-radius: 13px; padding: 12px 14px; }
+    .typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-2); opacity: .4; animation: blink 1.3s infinite; }
+    .typing span:nth-child(2) { animation-delay: .2s; }
+    .typing span:nth-child(3) { animation-delay: .4s; }
+    @keyframes blink { 0%,60%,100% { opacity: .3; transform: translateY(0); } 30% { opacity: .9; transform: translateY(-2px); } }
+    .mock-quote { margin: 0 18px 18px; background: var(--paper-2); border: 1px solid var(--border); border-radius: 14px; padding: 16px 16px 15px; }
+    .mock-eyebrow { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--terracotta-strong); font-weight: 600; }
+    .mock-quote .q-title { font-family: 'Fraunces', serif; font-weight: 600; font-size: 16px; margin: 4px 0 12px; }
+    .q-line { display: flex; align-items: center; gap: 8px; font-size: 13.5px; color: var(--ink-2); margin-bottom: 7px; }
+    .q-line .q-lbl { color: var(--ink); }
+    .q-dots { flex: 1; border-bottom: 1px dotted var(--border); }
+    .q-price { font-variant-numeric: tabular-nums; color: var(--ink); }
+    .q-total { display: flex; justify-content: space-between; align-items: baseline; font-family: 'Fraunces', serif; font-weight: 600; font-size: 18px; margin-top: 10px; padding-top: 11px; border-top: 1px solid var(--border); }
+    .q-actions { display: flex; gap: 8px; margin-top: 14px; }
+    .q-btn { flex: 1; text-align: center; padding: 10px; border-radius: 10px; font-size: 13.5px; font-weight: 600; background: var(--terracotta); color: var(--paper-on-dark); }
+    .q-btn.q-ghost { background: transparent; color: var(--ink); border: 1px solid var(--border); }
+
+    /* Trust bar */
+    .trust { border-top: 1px solid var(--border); background: var(--paper-2); }
+    .trust-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 22px 0; }
+    .trust-item { display: flex; align-items: center; gap: 10px; font-size: 14.5px; color: var(--ink-2); font-weight: 500; }
+    .trust-item svg { color: var(--terracotta-strong); flex-shrink: 0; }
+
     /* Sections */
     section.block { padding: 72px 0; border-top: 1px solid var(--border); }
-    .section-head { max-width: 60ch; margin-bottom: 44px; }
+    .section-head { max-width: 62ch; margin-bottom: 44px; }
     .section-head h2 { font-size: clamp(28px, 4vw, 40px); }
     .section-head p { color: var(--ink-2); font-size: 18px; margin-top: 14px; }
 
@@ -87,162 +176,296 @@
       padding: 28px; transition: transform .18s ease, box-shadow .18s ease;
     }
     .card:hover { transform: translateY(-3px); box-shadow: 0 14px 36px -20px rgba(27,23,20,.35); }
-    .card .ico {
-      width: 44px; height: 44px; border-radius: 11px; background: var(--paper-2);
-      display: grid; place-items: center; margin-bottom: 18px;
-      color: var(--terracotta-strong);
-    }
+    .card .ico { width: 44px; height: 44px; border-radius: 11px; background: var(--paper-2); display: grid; place-items: center; margin-bottom: 18px; color: var(--terracotta-strong); }
     .card h3 { font-size: 20px; margin-bottom: 8px; }
     .card p { color: var(--ink-2); font-size: 15px; }
 
+    /* WhatsApp split section */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; align-items: center; }
+    .split .mock { margin: 0; max-width: 380px; }
+    .wa-list { list-style: none; margin: 22px 0 0; display: flex; flex-direction: column; gap: 14px; }
+    .wa-list li { display: flex; gap: 12px; align-items: flex-start; font-size: 16px; color: var(--ink); }
+    .wa-list li svg { color: var(--terracotta-strong); flex-shrink: 0; margin-top: 3px; }
+    .wa-note { margin-top: 24px; font-size: 14px; color: var(--ink-3); border-left: 2px solid var(--border); padding-left: 14px; }
+
     /* Audience */
     .pills { display: flex; flex-wrap: wrap; gap: 12px; }
-    .pill {
-      background: var(--paper-2); border: 1px solid var(--border); border-radius: 999px;
-      padding: 10px 18px; font-size: 15px; font-weight: 500; color: var(--ink);
-    }
+    .pill { background: var(--paper-2); border: 1px solid var(--border); border-radius: 999px; padding: 10px 18px; font-size: 15px; font-weight: 500; color: var(--ink); }
+    .pills-note { margin-top: 22px; color: var(--ink-2); font-size: 15px; }
 
     /* Steps */
     .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-    .step .num {
-      font-family: 'Fraunces', serif; font-size: 40px; color: var(--terracotta);
-      font-weight: 600; line-height: 1; margin-bottom: 14px;
-    }
+    .step .num { font-family: 'Fraunces', serif; font-size: 40px; color: var(--terracotta); font-weight: 600; line-height: 1; margin-bottom: 14px; }
     .step h3 { font-size: 19px; margin-bottom: 8px; }
     .step p { color: var(--ink-2); font-size: 15px; }
 
+    /* Trust / RGPD */
+    .callout { background: var(--paper-2); border: 1px solid var(--border); border-radius: 16px; padding: 40px; }
+    .callout h2 { font-size: clamp(26px, 3.5vw, 34px); margin-bottom: 22px; }
+    .callout ul { list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 32px; }
+    .callout li { display: flex; gap: 11px; align-items: flex-start; font-size: 16px; color: var(--ink); }
+    .callout li svg { color: var(--terracotta-strong); flex-shrink: 0; margin-top: 3px; }
+    .callout .cta-line { margin-top: 26px; font-size: 15px; color: var(--ink-2); }
+
+    /* FAQ */
+    .faq { border: 1px solid var(--border); border-radius: 16px; margin-bottom: 12px; background: var(--paper); overflow: hidden; }
+    .faq summary { list-style: none; cursor: pointer; padding: 20px 22px; font-family: 'Fraunces', serif; font-weight: 600; font-size: 18px; color: var(--ink); display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after { content: "+"; color: var(--terracotta); font-size: 24px; font-family: 'Inter', sans-serif; line-height: 1; flex-shrink: 0; }
+    .faq[open] summary::after { content: "–"; }
+    .faq .faq-body { padding: 0 22px 22px; color: var(--ink-2); font-size: 16px; max-width: 68ch; }
+
     /* Contact */
-    .contact-box {
-      background: var(--ink); color: var(--paper); border-radius: 22px;
-      padding: 56px; text-align: center;
-    }
+    .contact-box { background: var(--ink); color: var(--paper); border-radius: 22px; padding: 56px; text-align: center; }
     .contact-box h2 { color: var(--paper); font-size: clamp(28px, 4vw, 38px); }
-    .contact-box p { color: #c9c1b3; max-width: 50ch; margin: 16px auto 28px; font-size: 18px; }
-    .contact-box a.btn { background: var(--terracotta); }
-    .contact-box a.btn:hover { background: var(--terracotta-strong); }
-    .contact-mail { display: inline-block; margin-top: 18px; color: #e7dccb; font-size: 16px; }
+    .contact-box p { color: #cfc7b9; max-width: 52ch; margin: 16px auto 28px; font-size: 18px; }
+    .contact-mail { display: block; margin-top: 18px; color: #e7dccb; font-size: 15px; }
+    .contact-mail a { color: #f0e7d8; display: inline-block; padding: 2px 0; }
 
     /* Footer */
-    footer { padding: 48px 0; border-top: 1px solid var(--border); color: var(--ink-2); }
-    .foot { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; font-size: 14px; }
-    .foot a { color: var(--ink-2); text-decoration: none; }
-    .foot a:hover { color: var(--ink); }
+    footer { padding: 48px 0 40px; border-top: 1px solid var(--border); color: var(--ink-2); }
+    .foot-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 24px; margin-bottom: 28px; }
+    .foot-brand { display: flex; align-items: center; gap: 12px; }
+    .foot-brand .logo { width: 32px; height: 32px; font-size: 18px; border-radius: 8px; }
+    .foot-tag { font-family: 'Fraunces', serif; font-weight: 500; color: var(--ink); font-size: 16px; }
     .foot-links { display: flex; gap: 22px; flex-wrap: wrap; }
+    .foot-links a { color: var(--ink-2); text-decoration: none; font-size: 14px; display: inline-block; padding: 6px 0; }
+    .foot-links a:hover { color: var(--ink); }
+    .foot-copy { font-size: 13px; color: var(--ink-3); border-top: 1px solid var(--border); padding-top: 22px; }
 
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+      .mock, .split .mock { margin: 0 auto; }
+      .split { grid-template-columns: 1fr; gap: 36px; }
+      .callout ul { grid-template-columns: 1fr; }
+    }
+    @media (min-width: 561px) and (max-width: 820px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+    }
     @media (max-width: 820px) {
-      .grid, .steps { grid-template-columns: 1fr; }
-      .nav-links a:not(.btn) { display: none; }
+      .nav-links { display: none; }
+      .mobile-nav { display: block; }
+      .steps { grid-template-columns: 1fr; }
+      .trust-row { grid-template-columns: 1fr 1fr; gap: 18px; }
+    }
+    @media (max-width: 560px) {
+      .grid { grid-template-columns: 1fr; }
+      .trust-row { grid-template-columns: 1fr; }
       .contact-box { padding: 40px 24px; }
-      .hero { padding: 60px 0 48px; }
+      .callout { padding: 28px 22px; }
+      .hero { padding: 56px 0 44px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { animation: none !important; transition: none !important; }
+      .card:hover { transform: none; box-shadow: none; }
+      .skip { transition: none; }
     }
   </style>
 </head>
 <body>
+  <a class="skip" href="#main">Aller au contenu</a>
+
   <header>
     <div class="wrap nav">
-      <a class="brand" href="./">
-        <span class="logo">K</span> Krafty
-      </a>
-      <nav class="nav-links">
+      <a class="brand" href="./"><span class="logo" aria-hidden="true">K</span> Krafty</a>
+
+      <nav class="nav-links" aria-label="Navigation principale">
         <a href="#produit">Produit</a>
+        <a href="#whatsapp">WhatsApp</a>
         <a href="#pour-qui">Pour qui</a>
-        <a href="#etapes">Comment ça marche</a>
-        <a class="btn" href="#contact">Nous contacter</a>
+        <a href="#confiance">Confiance</a>
+        <a href="#faq">FAQ</a>
+        <a class="btn" href="#contact">Demander une démo</a>
       </nav>
+
+      <details class="mobile-nav">
+        <summary aria-label="Menu"><span></span></summary>
+        <div class="mobile-panel" role="navigation" aria-label="Menu">
+          <a href="#produit">Produit</a>
+          <a href="#whatsapp">WhatsApp</a>
+          <a href="#pour-qui">Pour qui</a>
+          <a href="#confiance">Confiance</a>
+          <a href="#faq">FAQ</a>
+          <a class="btn" href="#contact">Demander une démo</a>
+        </div>
+      </details>
     </div>
   </header>
 
-  <main>
+  <main id="main" tabindex="-1">
+    <!-- Hero -->
     <section class="hero">
-      <div class="wrap">
-        <span class="eyebrow">L'assistant des artisans</span>
-        <h1>Votre secrétaire, sans la paperasse.</h1>
-        <p class="lead">
-          Krafty est un assistant intelligent conçu pour les artisans et les petites
-          entreprises de services. Il prend en charge vos devis, factures, rendez-vous
-          et relances clients — pour que vous restiez concentré sur votre métier.
-        </p>
-        <div class="hero-cta">
-          <a class="btn" href="#contact">Demander une démo</a>
-          <a class="btn btn-ghost" href="#produit">Voir ce que ça fait</a>
+      <div class="wrap hero-grid">
+        <div>
+          <span class="eyebrow">L'assistant des artisans du bâtiment</span>
+          <h1>Votre secrétaire, sans la paperasse.</h1>
+          <p class="lead">
+            Krafty répond à vos clients sur WhatsApp, prépare vos devis et factures,
+            cale les rendez-vous et relance les impayés. Vous validez d'un mot,
+            il s'occupe du reste.
+          </p>
+          <div class="hero-cta">
+            <a class="btn" href="#contact">Demander une démo</a>
+            <a class="btn btn-ghost" href="#whatsapp">Voir une conversation</a>
+          </div>
+          <p class="hero-note">WhatsApp officiel · Vos données dans l'UE · Sans engagement</p>
         </div>
-        <p class="hero-note">Pensé pour le terrain · Messagerie WhatsApp intégrée · Sans engagement</p>
+
+        <!-- Signature : carnet d'atelier -->
+        <div class="mock" role="img" aria-label="Exemple : un client écrit sur WhatsApp, Krafty prépare un devis, l'artisan valide et envoie.">
+          <div class="mock-head">
+            <span class="mock-avatar" aria-hidden="true">B</span>
+            <span>
+              <span class="mock-name">M. Bernard</span>
+              <span class="mock-status"><span class="dot" aria-hidden="true"></span> en ligne</span>
+            </span>
+          </div>
+          <div class="mock-thread">
+            <div class="bubble in">Bonjour, vous pourriez refaire l'étanchéité de ma terrasse ?</div>
+            <div class="bubble in">C'est assez urgent, ça fuit.</div>
+            <div class="bubble out">Bonjour M. Bernard, je vous prépare un devis, un instant.</div>
+            <div class="typing" aria-hidden="true"><span></span><span></span><span></span></div>
+          </div>
+          <div class="mock-quote">
+            <span class="mock-eyebrow">Devis préparé par Krafty</span>
+            <div class="q-title">Étanchéité de terrasse</div>
+            <div class="q-line"><span class="q-lbl">Reprise d'étanchéité</span><span class="q-dots" aria-hidden="true"></span><span class="q-price">980 €</span></div>
+            <div class="q-line"><span class="q-lbl">Déplacement + diagnostic</span><span class="q-dots" aria-hidden="true"></span><span class="q-price">90 €</span></div>
+            <div class="q-line"><span class="q-lbl">Protection &amp; finitions</span><span class="q-dots" aria-hidden="true"></span><span class="q-price">170 €</span></div>
+            <div class="q-total"><span>Total</span><span>1 240 €</span></div>
+            <div class="q-actions">
+              <span class="q-btn">Valider et envoyer</span>
+              <span class="q-btn q-ghost">Modifier</span>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
+    <!-- Trust bar -->
+    <div class="trust">
+      <div class="wrap trust-row">
+        <div class="trust-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21c4.97 0 9-3.58 9-8s-4.03-8-9-8-9 3.58-9 8c0 1.6.53 3.1 1.44 4.36L3 21l4.9-1.3A10 10 0 0 0 12 21Z"/></svg>
+          API WhatsApp Business officielle
+        </div>
+        <div class="trust-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.4 8-8 9-4.6-1-8-4-8-9V7l8-4Z"/><path d="M9 12l2 2 4-4"/></svg>
+          Données hébergées dans l'UE
+        </div>
+        <div class="trust-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          Vous gardez la main
+        </div>
+        <div class="trust-item">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M11 18h2"/></svg>
+          Application installable (PWA)
+        </div>
+      </div>
+    </div>
+
+    <!-- Produit -->
     <section class="block" id="produit">
       <div class="wrap">
         <div class="section-head">
-          <h2>Tout ce qu'un artisan repousse au soir, fait pour lui.</h2>
-          <p>Krafty s'occupe de l'administratif et de la relation client, automatiquement et au bon moment.</p>
+          <h2>Tout ce que vous repoussez au soir, Krafty le fait à votre place.</h2>
+          <p>De la première demande au paiement, Krafty prépare tout le travail administratif. Vous n'avez qu'à valider.</p>
         </div>
         <div class="grid">
           <div class="card">
-            <div class="ico" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12h6M9 16h6M9 8h6M6 4h9l5 5v11a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/></svg>
-            </div>
-            <h3>Devis & factures</h3>
-            <p>Génère des devis et factures clairs en quelques secondes, et garde une trace de chaque document.</p>
+            <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12h6M9 16h6M9 8h6M6 4h9l5 5v11a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/></svg></div>
+            <h3>Devis &amp; factures</h3>
+            <p>Prépare des devis et factures propres à partir de la demande du client. Vous relisez, vous envoyez.</p>
           </div>
           <div class="card">
-            <div class="ico" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
-            </div>
-            <h3>Rendez-vous</h3>
-            <p>Organise votre agenda, envoie les confirmations et les rappels aux clients sans que vous y pensiez.</p>
+            <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></div>
+            <h3>Rendez-vous &amp; tournées</h3>
+            <p>Cale vos rendez-vous et optimise l'ordre de vos interventions pour limiter les trajets. Confirmations et rappels de rendez-vous, automatisables quand vous le décidez.</p>
           </div>
           <div class="card">
-            <div class="ico" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>
-            </div>
+            <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg></div>
             <h3>Relances clients</h3>
-            <p>Relance poliment les devis sans réponse et les factures impayées, au moment opportun.</p>
+            <p>Relance les devis sans réponse et les factures impayées, au bon moment, avec des garde-fous anti-spam.</p>
           </div>
           <div class="card">
-            <div class="ico" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c4.97 0 9-3.58 9-8s-4.03-8-9-8-9 3.58-9 8c0 1.6.53 3.1 1.44 4.36L3 21l4.9-1.3A10 10 0 0 0 12 21Z"/></svg>
-            </div>
+            <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21c4.97 0 9-3.58 9-8s-4.03-8-9-8-9 3.58-9 8c0 1.6.53 3.1 1.44 4.36L3 21l4.9-1.3A10 10 0 0 0 12 21Z"/></svg></div>
             <h3>Messagerie WhatsApp</h3>
-            <p>Centralise les échanges avec vos clients sur WhatsApp et vous aide à répondre vite et bien.</p>
+            <p>Regroupe tous vos échanges WhatsApp au même endroit et vous propose une réponse prête à envoyer.</p>
           </div>
           <div class="card">
-            <div class="ico" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg>
-            </div>
+            <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4 20c0-3.3 3.6-6 8-6s8 2.7 8 6"/></svg></div>
             <h3>Mémoire client</h3>
-            <p>Se souvient de chaque client, de ses chantiers et de ses préférences pour des échanges personnalisés.</p>
+            <p>Retrouve l'historique de chaque client — ses chantiers, ses devis, ce que vous vous êtes dit — au moment où vous en avez besoin.</p>
           </div>
           <div class="card">
-            <div class="ico" aria-hidden="true">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
-            </div>
-            <h3>Pilotage automatique</h3>
-            <p>Vous gardez la main : Krafty propose les actions, vous validez. Rien n'est envoyé sans votre accord.</p>
+            <div class="ico" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v2M12 19v2M5 12H3M21 12h-2M6.3 6.3 4.9 4.9M19.1 19.1l-1.4-1.4"/><circle cx="12" cy="12" r="4"/></svg></div>
+            <h3>Vous gardez la main</h3>
+            <p>Krafty propose, vous validez. Vous fixez des seuils de montant et de confiance ; rien ne part au client sans votre accord.</p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- WhatsApp -->
+    <section class="block" id="whatsapp">
+      <div class="wrap split">
+        <div class="mock" aria-hidden="true">
+          <div class="mock-head">
+            <span class="mock-avatar">L</span>
+            <span>
+              <span class="mock-name">Mme Leroy</span>
+              <span class="mock-status"><span class="dot"></span> en ligne</span>
+            </span>
+          </div>
+          <div class="mock-thread">
+            <div class="bubble in">Il me faudrait un rendez-vous cette semaine pour une fuite sous l'évier.</div>
+            <div class="bubble out">Je peux vous proposer jeudi matin. Ça vous convient ?</div>
+            <div class="bubble in">Parfait, jeudi 9h.</div>
+            <div class="bubble out">C'est noté. Vous recevrez un rappel la veille.</div>
+          </div>
+        </div>
+        <div>
+          <div class="section-head" style="margin-bottom:24px">
+            <h2>Tout se passe sur WhatsApp.</h2>
+            <p>Vos clients vous écrivent comme d'habitude. Krafty lit la demande, prépare la réponse, le devis ou le rendez-vous, et vous le montre. Rien ne part sans votre accord.</p>
+          </div>
+          <ul class="wa-list">
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Aucune appli à faire installer à vos clients.</li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Vous répondez depuis votre téléphone ou depuis Krafty.</li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Chaque échange est gardé au propre, client par client.</li>
+          </ul>
+          <p class="wa-note">Messagerie officielle via l'API WhatsApp Business — pas de prospection sauvage.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pour qui -->
     <section class="block" id="pour-qui">
       <div class="wrap">
         <div class="section-head">
           <h2>Fait pour les métiers du terrain.</h2>
-          <p>Krafty s'adresse aux artisans et petites entreprises de services qui jonglent entre chantiers et administratif.</p>
+          <p>Si vous passez vos journées sur les chantiers et vos soirées sur la paperasse, Krafty est pour vous.</p>
         </div>
         <div class="pills">
           <span class="pill">Plombiers</span>
           <span class="pill">Électriciens</span>
-          <span class="pill">Rénovation</span>
+          <span class="pill">Chauffagistes</span>
+          <span class="pill">Serruriers</span>
+          <span class="pill">Couvreurs</span>
+          <span class="pill">Carreleurs</span>
           <span class="pill">Peintres</span>
           <span class="pill">Menuisiers</span>
-          <span class="pill">Chauffagistes</span>
           <span class="pill">Maçons</span>
-          <span class="pill">Paysagistes</span>
+          <span class="pill">Rénovation</span>
           <span class="pill">Artisans du bâtiment</span>
         </div>
+        <p class="pills-note">Votre métier n'est pas dans la liste ? Ça marche quand même.</p>
       </div>
     </section>
 
+    <!-- Comment ça marche -->
     <section class="block" id="etapes">
       <div class="wrap">
         <div class="section-head">
@@ -251,43 +474,156 @@
         </div>
         <div class="steps">
           <div class="step">
-            <div class="num">1</div>
-            <h3>Vous configurez votre activité</h3>
-            <p>Métier, prestations, tarifs, horaires et canaux de contact. Krafty s'adapte à votre entreprise.</p>
+            <div class="num" aria-hidden="true">1</div>
+            <h3>On configure avec vous</h3>
+            <p>Vous nous parlez de votre activité — métier, prestations, tarifs, horaires. On met Krafty en place à votre image.</p>
           </div>
           <div class="step">
-            <div class="num">2</div>
+            <div class="num" aria-hidden="true">2</div>
             <h3>Vos clients vous écrivent</h3>
-            <p>Les demandes arrivent par WhatsApp. Krafty les organise et prépare devis, rendez-vous et réponses.</p>
+            <p>Les demandes arrivent sur WhatsApp. Krafty les organise et prépare devis, rendez-vous et réponses.</p>
           </div>
           <div class="step">
-            <div class="num">3</div>
+            <div class="num" aria-hidden="true">3</div>
             <h3>Vous validez, c'est envoyé</h3>
-            <p>Vous gardez le contrôle. Krafty exécute les tâches répétitives et vous fait gagner des heures chaque semaine.</p>
+            <p>Vous gardez le contrôle. Krafty exécute les tâches répétitives — vous récupérez vos soirées.</p>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- Confiance & RGPD -->
+    <section class="block" id="confiance">
+      <div class="wrap">
+        <div class="callout">
+          <h2>Vos données restent les vôtres.</h2>
+          <ul>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.4 8-8 9-4.6-1-8-4-8-9V7l8-4Z"/></svg> Hébergées dans l'Union européenne.</li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> RGPD : accès, rectification et suppression sur simple demande.</li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21c4.97 0 9-3.58 9-8s-4.03-8-9-8-9 3.58-9 8c0 1.6.53 3.1 1.44 4.36L3 21l4.9-1.3A10 10 0 0 0 12 21Z"/></svg> Messagerie via l'API officielle WhatsApp Business.</li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg> On ne vend ni ne loue aucune donnée.</li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg> Par défaut, rien ne part au client sans votre validation.</li>
+          </ul>
+          <p class="cta-line">
+            En savoir plus : <a href="privacy.html">Politique de confidentialité</a> ·
+            <a href="data-deletion.html">Suppression des données</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="block" id="faq">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Questions fréquentes</h2>
+        </div>
+        <details class="faq">
+          <summary>Faut-il un nouveau numéro WhatsApp ?</summary>
+          <div class="faq-body">On met en place la messagerie WhatsApp Business avec vous lors de la configuration — vous n'avez rien de technique à gérer. La connexion en autonomie depuis l'application arrive bientôt.</div>
+        </details>
+        <details class="faq">
+          <summary>Mes clients doivent-ils installer quelque chose ?</summary>
+          <div class="faq-body">Non. Vos clients vous écrivent sur WhatsApp comme ils le font déjà. Rien à télécharger de leur côté.</div>
+        </details>
+        <details class="faq">
+          <summary>Est-ce que Krafty envoie des messages tout seul ?</summary>
+          <div class="faq-body">Par défaut, non : vous validez chaque devis, facture et message avant l'envoi. Vous pouvez ensuite activer l'automatique, avec des seuils de montant et de confiance que vous fixez.</div>
+        </details>
+        <details class="faq">
+          <summary>Où sont stockées mes données ?</summary>
+          <div class="faq-body">Dans l'Union européenne, conformément au RGPD. Vous pouvez demander l'accès, la rectification ou la suppression à tout moment. Nous ne vendons ni ne louons vos données.</div>
+        </details>
+        <details class="faq">
+          <summary>Je ne suis pas à l'aise avec l'informatique, c'est un problème ?</summary>
+          <div class="faq-body">Non. Krafty est pensé pour être simple : l'essentiel passe par WhatsApp, que vous utilisez déjà, et on configure tout avec vous au démarrage.</div>
+        </details>
+        <details class="faq">
+          <summary>Suis-je engagé ?</summary>
+          <div class="faq-body">On commence par une démo, sans engagement. On regarde ensemble ce que Krafty ferait concrètement pour votre activité avant d'aller plus loin.</div>
+        </details>
+        <details class="faq">
+          <summary>Combien ça coûte ?</summary>
+          <div class="faq-body">On en parle lors de la démo, en fonction de votre métier et de vos besoins. Écrivez-nous, on vous répond.</div>
+        </details>
+      </div>
+    </section>
+
+    <!-- Contact -->
     <section class="block" id="contact">
       <div class="wrap">
         <div class="contact-box">
-          <h2>Envie d'essayer Krafty ?</h2>
-          <p>Écrivez-nous : on vous présente l'outil et on répond à toutes vos questions.</p>
-          <a class="btn" href="mailto:support@app-krafty.com">Nous contacter</a>
+          <h2>On vous montre Krafty en 15 minutes.</h2>
+          <p>Dites-nous votre métier, on vous montre concrètement ce que Krafty ferait pour vous. Sans engagement.</p>
+          <a class="btn" href="mailto:support@app-krafty.com?subject=Demande%20de%20d%C3%A9mo%20Krafty">Demander une démo</a>
+          <span class="contact-mail">ou écrivez à <a href="mailto:support@app-krafty.com">support@app-krafty.com</a></span>
         </div>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="wrap foot">
-      <div>© 2026 Krafty · Tous droits réservés</div>
-      <div class="foot-links">
-        <a href="mailto:support@app-krafty.com">Nous contacter</a>
-        <a href="privacy.html">Politique de confidentialité</a>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <span class="logo" aria-hidden="true">K</span>
+          <span class="foot-tag">Krafty — l'assistant des artisans.</span>
+        </div>
+        <nav class="foot-links" aria-label="Liens légaux">
+          <a href="privacy.html">Politique de confidentialité</a>
+          <a href="terms.html">CGU</a>
+          <a href="data-deletion.html">Suppression des données</a>
+          <a href="mentions-legales.html">Mentions légales</a>
+          <a href="mailto:support@app-krafty.com">Nous contacter</a>
+        </nav>
       </div>
+      <div class="foot-copy">© 2026 Krafty · Tous droits réservés</div>
     </div>
   </footer>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://jaddo18.github.io/krafty-landing/#organization",
+        "name": "Krafty",
+        "url": "https://jaddo18.github.io/krafty-landing/",
+        "email": "support@app-krafty.com",
+        "description": "Assistant intelligent (secrétaire WhatsApp) pour artisans et petites entreprises de services : devis, factures, rendez-vous, relances et messagerie client."
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://jaddo18.github.io/krafty-landing/#website",
+        "url": "https://jaddo18.github.io/krafty-landing/",
+        "name": "Krafty",
+        "inLanguage": "fr-FR",
+        "publisher": { "@id": "https://jaddo18.github.io/krafty-landing/#organization" }
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "Krafty",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web (PWA)",
+        "inLanguage": "fr-FR",
+        "description": "Krafty répond à vos clients sur WhatsApp, prépare vos devis et factures, cale vos rendez-vous et relance les impayés. Vous validez, il envoie.",
+        "publisher": { "@id": "https://jaddo18.github.io/krafty-landing/#organization" }
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          { "@type": "Question", "name": "Faut-il un nouveau numéro WhatsApp ?", "acceptedAnswer": { "@type": "Answer", "text": "On met en place la messagerie WhatsApp Business avec vous lors de la configuration — vous n'avez rien de technique à gérer. La connexion en autonomie depuis l'application arrive bientôt." } },
+          { "@type": "Question", "name": "Mes clients doivent-ils installer quelque chose ?", "acceptedAnswer": { "@type": "Answer", "text": "Non. Vos clients vous écrivent sur WhatsApp comme ils le font déjà. Rien à télécharger de leur côté." } },
+          { "@type": "Question", "name": "Est-ce que Krafty envoie des messages tout seul ?", "acceptedAnswer": { "@type": "Answer", "text": "Par défaut, non : vous validez chaque devis, facture et message avant l'envoi. Vous pouvez ensuite activer l'automatique, avec des seuils de montant et de confiance que vous fixez." } },
+          { "@type": "Question", "name": "Où sont stockées mes données ?", "acceptedAnswer": { "@type": "Answer", "text": "Dans l'Union européenne, conformément au RGPD. Vous pouvez demander l'accès, la rectification ou la suppression à tout moment. Nous ne vendons ni ne louons vos données." } },
+          { "@type": "Question", "name": "Je ne suis pas à l'aise avec l'informatique, c'est un problème ?", "acceptedAnswer": { "@type": "Answer", "text": "Non. Krafty est pensé pour être simple : l'essentiel passe par WhatsApp, que vous utilisez déjà, et on configure tout avec vous au démarrage." } },
+          { "@type": "Question", "name": "Suis-je engagé ?", "acceptedAnswer": { "@type": "Answer", "text": "On commence par une démo, sans engagement. On regarde ensemble ce que Krafty ferait concrètement pour votre activité avant d'aller plus loin." } },
+          { "@type": "Question", "name": "Combien ça coûte ?", "acceptedAnswer": { "@type": "Answer", "text": "On en parle lors de la démo, en fonction de votre métier et de vos besoins. Écrivez-nous, on vous répond." } }
+        ]
+      }
+    ]
+  }
+  </script>
 </body>
 </html>

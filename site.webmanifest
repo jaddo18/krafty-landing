@@ -1,0 +1,14 @@
+{
+  "name": "Krafty",
+  "short_name": "Krafty",
+  "description": "Le secrétaire WhatsApp des artisans.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "background_color": "#fcfaf4",
+  "theme_color": "#fcfaf4",
+  "lang": "fr-FR",
+  "icons": [
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
