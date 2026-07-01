@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Suppression des données — Krafty</title>
+  <meta name="description" content="Comment demander la suppression de vos données personnelles chez Krafty." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { --paper:#fcfaf4; --paper-2:#f3eee4; --ink:#1b1714; --ink-2:#6e665a; --terracotta:#a85d2e; --terracotta-strong:#8a4a22; --border:#dcd2c0; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Inter',system-ui,sans-serif; color:var(--ink); background:var(--paper); line-height:1.7; -webkit-font-smoothing:antialiased; }
+    h1,h2,h3 { font-family:'Fraunces',Georgia,serif; line-height:1.2; }
+    a { color:var(--terracotta-strong); }
+    .wrap { max-width:760px; margin:0 auto; padding:0 24px; }
+    header { border-bottom:1px solid var(--border); background:var(--paper); }
+    .nav { display:flex; align-items:center; height:68px; }
+    .brand { display:flex; align-items:center; gap:12px; font-family:'Fraunces',serif; font-weight:600; font-size:22px; color:var(--ink); text-decoration:none; }
+    .logo { width:36px; height:36px; border-radius:9px; background:var(--ink); color:var(--paper); display:grid; place-items:center; font-family:'Fraunces',serif; font-weight:600; font-size:20px; }
+    .doc { padding:56px 0 80px; }
+    .doc h1 { font-size:clamp(32px,5vw,46px); margin-bottom:10px; }
+    .updated { color:var(--ink-2); font-size:15px; margin-bottom:40px; }
+    .doc h2 { font-size:23px; margin:38px 0 12px; }
+    .doc h3 { font-size:18px; margin:22px 0 8px; }
+    .doc p, .doc li { color:var(--ink); font-size:16px; }
+    .doc p { margin-bottom:14px; }
+    .doc ul, .doc ol { margin:0 0 16px 22px; }
+    .doc li { margin-bottom:8px; }
+    .callout { background:var(--paper-2); border:1px solid var(--border); border-radius:12px; padding:18px 20px; margin:20px 0; }
+    .back { display:inline-block; margin-top:48px; color:var(--terracotta-strong); text-decoration:none; font-weight:600; }
+    footer { padding:40px 0; border-top:1px solid var(--border); color:var(--ink-2); font-size:14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="./"><span class="logo">K</span> Krafty</a>
+    </div>
+  </header>
+
+  <main class="doc">
+    <div class="wrap">
+      <h1>Suppression des données</h1>
+      <p class="updated">Dernière mise à jour : 2 juillet 2026</p>
+
+      <p>
+        Cette page explique comment demander la suppression des données personnelles traitées par
+        Krafty, conformément au RGPD et aux exigences de la plateforme Meta / WhatsApp Business.
+      </p>
+
+      <h2>1. Quelles données peuvent être supprimées</h2>
+      <p>Sur demande, nous supprimons les données personnelles associées à votre compte, notamment :</p>
+      <ul>
+        <li>les informations de compte professionnel (entreprise, coordonnées, identifiants) ;</li>
+        <li>les données d'activité (devis, factures, rendez-vous, historique) ;</li>
+        <li>les données clients que vous avez saisies ou reçues, y compris les messages WhatsApp.</li>
+      </ul>
+
+      <h2>2. Comment demander la suppression</h2>
+      <div class="callout">
+        <p style="margin-bottom:8px;"><strong>Par e-mail (méthode recommandée)</strong></p>
+        <p style="margin-bottom:0;">
+          Envoyez une demande à <a href="mailto:support@amplyio.com?subject=Suppression%20de%20mes%20donn%C3%A9es%20Krafty">support@amplyio.com</a>
+          avec pour objet « Suppression de mes données » depuis l'adresse e-mail associée à votre
+          compte. Indiquez le nom de votre entreprise pour nous aider à identifier le compte.
+        </p>
+      </div>
+      <p>Vous pouvez aussi, si vous êtes connecté à l'application, nous contacter depuis vos réglages.</p>
+
+      <h2>3. Délai de traitement</h2>
+      <p>
+        Nous accusons réception de votre demande sous 72 heures et procédons à la suppression sous
+        30 jours au plus. Certaines données peuvent être conservées lorsque la loi l'exige (par
+        exemple, obligations comptables relatives aux factures) ; elles sont alors isolées et
+        supprimées à l'expiration du délai légal.
+      </p>
+
+      <h2>4. Données WhatsApp</h2>
+      <p>
+        Les messages échangés via l'API WhatsApp Business et associés à votre compte sont supprimés
+        dans le cadre de la même demande. Krafty ne conserve pas ces messages au-delà de ce qui est
+        nécessaire à l'acheminement de la conversation entre vous et vos clients.
+      </p>
+
+      <h2>5. Contact</h2>
+      <p>
+        Pour toute question relative à la suppression de vos données :
+        <a href="mailto:support@amplyio.com">support@amplyio.com</a>. Voir aussi notre
+        <a href="./privacy.html">Politique de confidentialité</a>.
+      </p>
+
+      <a class="back" href="./">← Retour à l'accueil</a>
+    </div>
+  </main>
+
+  <footer>
+    <div class="wrap">© 2026 Krafty · <a href="mailto:support@amplyio.com" style="color:inherit;">Nous contacter</a></div>
+  </footer>
+</body>
+</html>
